@@ -22,7 +22,8 @@ define('STATISTIC_ON', true);
 $count = array(
 	'uppercase' => '0',
 	'color' => '0',
-	'space' => '0');
+	'space' => '0',
+	'commas' => '0');
 
 
 $input_file = file(INPUT_FILE);
@@ -95,12 +96,13 @@ foreach($input_file as $line => $string)
 	// Выводим в процентах состояние обработки
 	if (STATISTIC_ON)
 	{	
-		$result = (100 / $max_price_lines) * $line;
-		$result = (int)$result;
+		$result = ShowWhatDone($line, $max_price_lines);
 		echo 'Быстрая чистка прайса: '.$result.' %'."\r";
 	}
 }
 if (STATISTIC_ON) {echo 'Быстрая чистка прайса: 100 %'."\n";}
+
+//-------------------------------------
 
 // Чистка прайса по ключевым словам
 foreach($input_file as $line => $string)
@@ -168,14 +170,13 @@ foreach($input_file as $line => $string)
 	// Выводим в процентах состояние обработки
 	if (STATISTIC_ON)
 	{
-		$result = (100 / $max_price_lines) * $line;
-		$result = (int)$result;
+		$result = ShowWhatDone($line, $max_price_lines);
 		echo 'Исправление по ключевым словам: '.$result.' %'."\r";
 	}
 }
 if (STATISTIC_ON) {echo 'Исправление по ключевым словам: 100 %'."\n";}
 
-//-----------------------------------------------------------
+//-------------------------------------
 
 // Перемещаем цвет в конец строки
 foreach($input_file as $line => $string)
@@ -219,12 +220,36 @@ foreach($input_file as $line => $string)
 	// Выводим в процентах состояние обработки
 	if (STATISTIC_ON)
 	{
-		$result_color = (100 / $max_price_lines) * $line;
-		$result_color = (int)$result_color;
-		echo 'Перемещение названий цветов в конец строки: '.$result_color.' %'."\r";
+		$result = ShowWhatDone($line, $max_price_lines);
+		echo 'Перемещение названий цветов в конец строки: '.$result.' %'."\r";
 	}
 }
 if (STATISTIC_ON) {echo 'Перемещение названий цветов в конец строки: 100 %'."\n";}
+
+//-------------------------------------
+
+// исправление положения запятых
+foreach($input_file as $line => $string)
+{
+	$pattern = '/ *,/';
+	$raplace_atring = ', ';
+	$input_file[$line] = preg_replace($pattern, $raplace_atring, $string, -1, $result);
+	if (0 < $result)
+	{
+		$count['commas'] += 1;
+		$result = NULL;
+	}
+
+	// Выводим в процентах состояние обработки
+	if (STATISTIC_ON)
+	{
+		$result = ShowWhatDone($line, $max_price_lines);
+		echo 'Исправление положения зяпятых: '.$result.' %'."\r";
+	}
+}
+if (STATISTIC_ON) {echo 'Исправление положения зяпятых: 100 %'."\n";}
+
+//-------------------------------------
 
 // Удаление двойных пробелов
 foreach($input_file as $line => $string)
@@ -241,12 +266,13 @@ foreach($input_file as $line => $string)
 	// Выводим в процентах состояние обработки
 	if (STATISTIC_ON)
 	{
-		$result_space = (100 / $max_price_lines) * $line;
-		$result_space = (int)$result_space;
+		$result_space = ShowWhatDone($line, $max_price_lines);
 		echo 'Удаление двойных пробелов: '.$result_space.' %'."\r";
 	}
 }
 if (STATISTIC_ON) {echo 'Удаление двойных пробелов: 100 %'."\n";}
+
+//-------------------------------------
 
 // Сохраняем в файл
 foreach ($input_file as $output_string)
@@ -255,20 +281,29 @@ foreach ($input_file as $output_string)
 	fputs($output_file, $output_string);
 }
 
+//-------------------------------------
+
 // Статистика выполнения скрипта
 $time = microtime(true) - $start;
+
 if (STATISTIC_ON)
 {
 	echo '-------------------------------------'."\n";
 	echo 'Исправлено названий: '.$count['uppercase']."\n";
 	echo 'Исправлено цветов: '.$count['color']."\n";
+	echo 'Исправлено запятых: '.$count['commas']."\n";
 	echo 'Удалено лишних пробелов: '.$count['space']."\n";
 	$sum_count = $count['uppercase'] + $count['color'] + $count['space'];
 	echo 'Всего исправлено: '.$sum_count."\n";
 	printf('Скрипт выполнялся %.4F сек.', $time);
 }
-//--function--
 
+// THE END
+
+// Функция создает шаблон поиска
+// Входная строка разбивается на массив слов
+// Заменяются все плюсы на поробелы (так как пробелы удаляются иногда нужен шаблон с пробелом)
+// Возвращается одномерный массив шаблонов поиска
 function PatternCreater($arg)
 {
 	$array = explode(',', $arg);
@@ -277,7 +312,8 @@ function PatternCreater($arg)
 		if (!empty($value))
 		{
 			$value = trim($value);
-			// Замена плюсов
+			
+			// Замена знака плюс на пробел
 			$array[$key] = str_replace('+', ' ', $value);
 		}
 		else
@@ -286,6 +322,18 @@ function PatternCreater($arg)
 		}
 	}
 	return $array;
+}
+
+// Функция подсчитывает отношение $current к $max в процентах
+// Это нужно для отображения информации о степени завершенности обработки
+function ShowWhatDone($current, $max)
+{
+	if (!empty($current) && !empty($max) && ($current <= $max))
+	{
+		$result = (100 / $max) * $current;
+		$result = (int)$result;
+		return ($result);
+	}
 }
 
 ?> 
