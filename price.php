@@ -100,7 +100,8 @@ foreach($input_file as $line => $string)
 		echo 'Быстрая чистка прайса: '.$result.' %'."\r";
 	}
 }
-if (STATISTIC_ON) {echo 'Быстрая чистка прайса: 100 %'."\n";}
+// Очистка потока вывода
+echo "\n";
 
 //-------------------------------------
 
@@ -174,7 +175,8 @@ foreach($input_file as $line => $string)
 		echo 'Исправление по ключевым словам: '.$result.' %'."\r";
 	}
 }
-if (STATISTIC_ON) {echo 'Исправление по ключевым словам: 100 %'."\n";}
+// Очистка потока вывода
+echo "\n";
 
 //-------------------------------------
 
@@ -224,7 +226,8 @@ foreach($input_file as $line => $string)
 		echo 'Перемещение названий цветов в конец строки: '.$result.' %'."\r";
 	}
 }
-if (STATISTIC_ON) {echo 'Перемещение названий цветов в конец строки: 100 %'."\n";}
+// Очистка потока вывода
+echo "\n";
 
 //-------------------------------------
 
@@ -247,7 +250,8 @@ foreach($input_file as $line => $string)
 		echo 'Исправление положения зяпятых: '.$result.' %'."\r";
 	}
 }
-if (STATISTIC_ON) {echo 'Исправление положения зяпятых: 100 %'."\n";}
+// Очистка потока вывода
+echo "\n";
 
 //-------------------------------------
 
@@ -270,7 +274,8 @@ foreach($input_file as $line => $string)
 		echo 'Удаление двойных пробелов: '.$result_space.' %'."\r";
 	}
 }
-if (STATISTIC_ON) {echo 'Удаление двойных пробелов: 100 %'."\n";}
+// Очистка потока вывода
+echo "\n";
 
 //-------------------------------------
 
@@ -328,11 +333,18 @@ function PatternCreater($arg)
 // Это нужно для отображения информации о степени завершенности обработки
 function ShowWhatDone($current, $max)
 {
-	if (!empty($current) && !empty($max) && ($current <= $max))
+	if (!empty($current) && !empty($max))
 	{
-		$result = (100 / $max) * $current;
-		$result = (int)$result;
-		return ($result);
+		if ($current <= $max)
+		{
+			$result = (100 / $max) * $current;
+			$result = (int)$result;
+			return ($result);
+		}
+		elseif($current == $max)
+		{
+			return ('100');
+		}
 	}
 }
 
