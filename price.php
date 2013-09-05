@@ -3,32 +3,65 @@
 
 $start = microtime(true); // Время начала выполнения скрипта
 
-define('INPUT_FILE','Мерлион.csv');
+$input_file = 'Мерлион.csv'; // Имя входного файла по умолчанию
 
-define('OUT_FILE', 'Merlion_out.csv');
+$output_file = 'Merlion_out.csv'; // Имя выходного файла по умолчанию
 
-define('COLOR_LIST', 'colors.txt');
+$arg[] = ''; // Массив входных параметров
 
-define('LOG_FILE', 'log.csv');
+define('WORD_FILE', 'dictionary.txt'); // Словарь
 
-define('STRLN', '1');
+define('COLOR_LIST', 'colors.txt'); // Файл со списком цветов
 
-define('WORD_FILE', 'dictionary.txt');
+define('LOG_FILE', 'log.csv'); // Имя файла логов
 
-define('STATISTIC_ON', true);
+define('STRLN', '2'); // Минимальная длина подстроки подверженная изменениям
+
+define('STATISTIC_ON', true); // Вывод информации о процессе обработки. true - выводить, false - не выводить.
+
+// Разбираем параметры
+foreach($argv as $index => $value)
+{
+	if (!isset($count))
+	{
+		$count = '0';
+	}
+	
+	if ($index != '0')
+	{
+		if ($value[0] != '-')
+		{
+			$arg[$count] = $value;		
+			$count += '1';
+		}
+	}
+}
+
+// Переименовываем переменные в соответствии с введенными параметрами
+if (!empty($arg[0]))
+{
+	$arg[0] = trim($arg[0]);
+	$arg[0] = preg_replace("/[^\x20-\xFF]/","",@strval($arg[0]));
+	$input_file = $arg[0];
+}
+
+if (!empty($arg[1]))
+{
+	$arg[1] = trim($arg[1]);
+	$arg[1] = preg_replace("/[^\x20-\xFF]/","",@strval($arg[1]));
+	$output_file = $arg[1];
+}
 
 // Счетчики
-
 $count = array(
 	'uppercase' => '0',
 	'color' => '0',
 	'space' => '0',
 	'commas' => '0');
+	
+$input_file = file($input_file);
 
-
-$input_file = file(INPUT_FILE);
-
-$output_file = fopen(OUT_FILE, 'w');
+$output_file = fopen($output_file, 'w');
 
 $log_file = fopen(LOG_FILE, 'w');
 
@@ -38,7 +71,7 @@ $color_list = file(COLOR_LIST);
 
 $edit_string = '';
 
-// это нужно для отображения текущего состояния обработки
+// Получаем число строк для отображения состояния выполнения
 $max_price_lines = max(array_keys($input_file));
 
 // Быстрая чистка прайса - убираем все заглавные буквы там где их не должно быть
@@ -81,12 +114,14 @@ foreach($input_file as $line => $string)
 			}
 		}
 	}
+	
 	// Сливаем все части обратно в строку
 	$ready_string = $array_by_column[0].';';
 	foreach($array_by_word as $value)
 	{
 		$ready_string .= $value.' ';
 	}
+	
 	$ready_string = trim($ready_string);
 	$ready_string .= ';'.$array_by_column[2].';'.$array_by_column[3];
 	$ready_string = iconv('UTF-8','CP1251', $ready_string);
@@ -100,6 +135,7 @@ foreach($input_file as $line => $string)
 		echo 'Быстрая чистка прайса: '.$result.' %'."\r";
 	}
 }
+
 // Очистка потока вывода
 echo "\n";
 
@@ -162,7 +198,6 @@ foreach($input_file as $line => $string)
 		}
 	}
 	
-	
 	// Сохранение строки обработанного прайса
 	$array_by_column[1] = trim($array_by_column[1]);
 	$output_string = $array_by_column[0].';'.$array_by_column[1].';'.$array_by_column[2].';'.$array_by_column[3];
@@ -175,6 +210,7 @@ foreach($input_file as $line => $string)
 		echo 'Исправление по ключевым словам: '.$result.' %'."\r";
 	}
 }
+
 // Очистка потока вывода
 echo "\n";
 
@@ -226,6 +262,7 @@ foreach($input_file as $line => $string)
 		echo 'Перемещение названий цветов в конец строки: '.$result.' %'."\r";
 	}
 }
+
 // Очистка потока вывода
 echo "\n";
 
@@ -250,6 +287,7 @@ foreach($input_file as $line => $string)
 		echo 'Исправление положения зяпятых: '.$result.' %'."\r";
 	}
 }
+
 // Очистка потока вывода
 echo "\n";
 
@@ -274,6 +312,7 @@ foreach($input_file as $line => $string)
 		echo 'Удаление двойных пробелов: '.$result_space.' %'."\r";
 	}
 }
+
 // Очистка потока вывода
 echo "\n";
 
@@ -304,6 +343,8 @@ if (STATISTIC_ON)
 }
 
 // THE END
+
+//-------------Функции-----------------
 
 // Функция создает шаблон поиска
 // Входная строка разбивается на массив слов
