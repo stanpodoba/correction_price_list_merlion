@@ -164,7 +164,7 @@ foreach($input_file as $line => $string)
 		
 		foreach($array_word_for_replace as $key => $word)
 		{
-			$pattern = '/'.$array_word_for_replace[$key].'/iu';
+			$pattern = '/ '.$array_word_for_replace[$key].' /iu';
 			
 			// Если слово написано с ошибкой - исправляем
 			if (preg_match($pattern, $array_by_column[1], $sub_string))
@@ -238,7 +238,7 @@ foreach($input_file as $line => $string)
 
 			if($result[0][1] < ($string_length - $color_string_length))
 			{
-				$array_by_column[1] = preg_replace($pattern, '', $array_by_column[1], -1, $number_of_changes);
+				$array_by_column[1] = preg_replace($pattern, ' ', $array_by_column[1], -1, $number_of_changes);
 				$array_by_column[1] .= ' '.$color;
 				
 				// Сохранение строки обработанного прайса
