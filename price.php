@@ -164,7 +164,7 @@ foreach($input_file as $line => $string)
 		
 		foreach($array_word_for_replace as $key => $word)
 		{
-			$pattern = '/ '.$array_word_for_replace[$key].' /iu';
+			$pattern = '/'.$array_word_for_replace[$key].'/iu';
 			
 			// Если слово написано с ошибкой - исправляем
 			if (preg_match($pattern, $array_by_column[1], $sub_string))
