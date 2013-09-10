@@ -1,3 +1,11 @@
++APC+
++ATI+
++HP+
++IP+
++Polar+
++Sun+
++kit+
++web+
 3D
 3Q
 A-Data
@@ -5,12 +13,11 @@ A4 Tech
 AMD
 AOC
 AOpen
-APC
-ATI
 Abbyy
 Access
 Accord
 Acer
+Acme Power
 Acorp
 Acrobat
 AeroCool
@@ -49,6 +56,7 @@ Bosch
 Brand
 Braun
 Brother
+CMOS
 Caffeo
 Candy
 Canon
@@ -79,6 +87,7 @@ Deepcool Gamma Archer
 Deepcool Ice Blade Pro
 Deepcool Neptwin
 Deepcool Theta
+Dell
 Delonghi
 Delta
 Deluxe
@@ -93,10 +102,10 @@ Duracell
 E-book
 E-series
 EA2
-Eaton
 ECS
 ESET NOD32
 EVA
+Eaton
 Eaton
 Ecomir
 Electrolux
@@ -128,6 +137,7 @@ Func
 Fusion
 G-Cube
 GGMM
+GPRS
 Galaxy
 Galaxy Note
 Galaxy Tab
@@ -158,7 +168,7 @@ Home
 Husqvarna
 Hynix
 Hyundai
-IP
+IP телефон
 IQBoard
 IceHut
 Iconbit
@@ -181,8 +191,9 @@ JVC
 Jabra
 Jaguar
 Janome
-Jet
+Jet+
 Jet Air
+Jetbalance, Jet balance
 Jetbalance
 Karcher
 Kaspersky
@@ -239,6 +250,7 @@ Microwave
 Minolta
 Miracase
 Mitac
+Moeller
 Molex
 Monster
 Moulinex
@@ -258,9 +270,10 @@ Norton
 Nuvi
 Nvidia
 OMB
+Office Кit
 OfficeProPlus
 Oklick
-Olym
+Olym+
 Olympus
 OnStage
 OpenStage
@@ -271,9 +284,11 @@ PCI-E
 PNY
 PQI
 Palit
+Panasonic
 Panda
 Panorama
 Pantum
+Papago
 Parkcity
 Patriot
 Philips
@@ -283,7 +298,6 @@ Pixma
 Plasma
 PlayStation
 Pocketbook
-Polar
 Polaris
 Polaroid
 Power Cube
@@ -312,6 +326,7 @@ SBP
 SVGA
 Saeco
 Samsung
+SanDisk
 Sapphire
 Satellite
 Scarlett
@@ -332,8 +347,8 @@ Speedlight
 StarWind
 Stealth
 StreetStorm
-+Sun+
 SuperFine
+SuperMicro
 Supra
 Surfer
 Surfpad
@@ -360,6 +375,7 @@ Toys
 Transcend
 Tripplite
 Tuarex
+Tайфун
 Tайфун
 USB
 Upvel
@@ -389,7 +405,6 @@ Zagg
 Zalman
 Zanussi
 Zeta
-zoom
 Zotac
 Zyxel
 body
@@ -402,22 +417,29 @@ iPad
 iPhone
 iPod
 iRU
-kit
 micro SD
+zoom
 АРС
 Аквафор
 Атлант
 Барьер
 Бирюса
 ГГц
-док-станция, док станция
 Интерскол
+Источник бесперебойного питания, Ибп
+Кабель-канал
+Кабель-переходник
+Кабель-удлинитель
+Картридж-тонер
 Китай
-Мбит
 МФУ, MFU
+Мбит
+Монитор-планшет
+ПК+
 Россия
 Саратов
 Сатин
+Свч-печь
 Старт
 Старт Алладин
 Старт Камень
@@ -430,5 +452,7 @@ micro SD
 Шнейдер
 Электрик
 дБи
-GPRS
-CMOS
+док-станция, док станция
+з\/у
+плоттер, плотер
+плоттера, плотера

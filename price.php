@@ -5,7 +5,7 @@ $start = microtime(true); // Время начала выполнения скр
 
 $input_file = 'Мерлион.csv'; // Имя входного файла по умолчанию
 
-$output_file = 'Merlion_out.csv'; // Имя выходного файла по умолчанию
+$output_file = 'Merlion_finished_'.date('d-m-Y_H-i').'.csv'; // Имя выходного файла по умолчанию
 
 $arg[] = ''; // Массив входных параметров
 
@@ -20,36 +20,40 @@ define('STRLN', '2'); // Минимальная длина подстроки п
 define('STATISTIC_ON', true); // Вывод информации о процессе обработки. true - выводить, false - не выводить.
 
 // Разбираем параметры
-foreach($argv as $index => $value)
+if ( 1 < $argc)
 {
-	if (!isset($count))
+	foreach($argv as $index => $value)
 	{
-		$count = '0';
-	}
-	
-	if ($index != '0')
-	{
-		if ($value[0] != '-')
+		if (!isset($count))
 		{
-			$arg[$count] = $value;		
-			$count += '1';
+			$count = '0';
+		}
+		
+		if ($index != '0')
+		{
+			if ($value[0] != '-')
+			{
+				$arg[$count] = $value;		
+				$count += '1';
+			}
 		}
 	}
-}
 
-// Переименовываем переменные в соответствии с введенными параметрами
-if (!empty($arg[0]))
-{
-	$arg[0] = trim($arg[0]);
-	$arg[0] = preg_replace("/[^\x20-\xFF]/","",@strval($arg[0]));
-	$input_file = $arg[0];
-}
 
-if (!empty($arg[1]))
-{
-	$arg[1] = trim($arg[1]);
-	$arg[1] = preg_replace("/[^\x20-\xFF]/","",@strval($arg[1]));
-	$output_file = $arg[1];
+	// Переименовываем переменные в соответствии с введенными параметрами
+	if (!empty($arg[0]))
+	{
+		$arg[0] = trim($arg[0]);
+		$arg[0] = preg_replace("/[^\x20-\xFF]/","",@strval($arg[0]));
+		$input_file = $arg[0];
+	}
+
+	if (!empty($arg[1]))
+	{
+		$arg[1] = trim($arg[1]);
+		$arg[1] = preg_replace("/[^\x20-\xFF]/","",@strval($arg[1]));
+		$output_file = $arg[1];
+	}
 }
 
 // Счетчики
@@ -58,8 +62,14 @@ $count = array(
 	'color' => '0',
 	'space' => '0',
 	'commas' => '0');
-	
+
 $input_file = file($input_file);
+
+if (empty($input_file))
+{
+  echo "Файл не найден!\n";
+  exit;
+}
 
 $output_file = fopen($output_file, 'w');
 
@@ -106,7 +116,7 @@ foreach($input_file as $line => $string)
 			{
 				$array_by_word[$index] = mb_convert_case($array_by_word[$index], MB_CASE_LOWER, 'UTF-8');
 				
-				$log = substr($string, 0, strlen($string)-1).' --> ;'.$array_by_word[$index].";Автоматически\n";
+				$log = substr($string, 0, strlen($string)-1).' --> ;'.$array_by_word[$index]."\n";
 				$log = iconv('UTF-8','CP1251', $log);
 				fputs($log_file, $log);
 				
