@@ -1,11 +1,11 @@
-+APC+
-+ATI+
-+HP+
-+IP+
-+Polar+
-+Sun+
-+kit+
-+web+
+_APC_
+_ATI_
+_HP_
+_IP_
+_Polar_
+_Sun_
+_kit_
+_web_
 3D
 3Q
 A-Data
@@ -79,7 +79,12 @@ Crumpler
 D-Link, Dlink
 DDR
 DLS
-DVD
+DVD_
+DVD-R_
+DVD+R_
+DVD+R
+DVD-RW
+DVD+RW
 Daewoo
 Dect
 Deepcool
@@ -191,7 +196,7 @@ JVC
 Jabra
 Jaguar
 Janome
-Jet+
+Jet_
 Jet Air
 Jetbalance, Jet balance
 Jetbalance
@@ -273,7 +278,7 @@ OMB
 Office Кit
 OfficeProPlus
 Oklick
-Olym+
+Olym_
 Olympus
 OnStage
 OpenStage
@@ -435,7 +440,7 @@ zoom
 МФУ, MFU
 Мбит
 Монитор-планшет
-ПК+
+ПК_
 Россия
 Саратов
 Сатин

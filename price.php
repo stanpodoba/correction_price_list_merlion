@@ -39,7 +39,6 @@ if ( 1 < $argc)
 		}
 	}
 
-
 	// Переименовываем переменные в соответствии с введенными параметрами
 	if (!empty($arg[0]))
 	{
@@ -71,8 +70,6 @@ if (empty($input_file))
   exit;
 }
 
-$output_file = fopen($output_file, 'w');
-
 $log_file = fopen(LOG_FILE, 'w');
 
 $exclusion_word = file(WORD_FILE);
@@ -88,15 +85,19 @@ $max_price_lines = max(array_keys($input_file));
 foreach($input_file as $line => $string)
 {
 	$string = iconv('CP1251','UTF-8', $string);
-
+	
+	// Если в названии есть точка-запятая она убирается
+	$string = getForColumn($string);
+	
 	// Разбор строки на стобцы
 	$array_by_column = explode(';', $string);
 	
 	// Убираем лишние пробелы
 	$array_by_column[1] = trim($array_by_column[1]);
 	
-	$array_by_column[1] = str_replace('"', '', $array_by_column[1]);
-
+	// Удаляем двойные ковычки, которые не относятся к дюймам
+	$array_by_column[1] = removeDoubleQuotes($array_by_column[1]);
+	
 	// Разбор столбца названия на слова
 	$array_by_word = explode(' ', $array_by_column[1]);
 	
@@ -134,8 +135,8 @@ foreach($input_file as $line => $string)
 	
 	$ready_string = trim($ready_string);
 	$ready_string .= ';'.$array_by_column[2].';'.$array_by_column[3];
-	$ready_string = iconv('UTF-8','CP1251', $ready_string);
-			
+	//$ready_string = iconv('UTF-8','CP1251', $ready_string);
+
 	$input_file[$line] = $ready_string;
 	
 	// Выводим в процентах состояние обработки
@@ -153,21 +154,13 @@ echo "\n";
 
 // Чистка прайса по ключевым словам
 foreach($input_file as $line => $string)
-{
-	$string = iconv('CP1251','UTF-8', $string);
-
+{	
 	// Разбор строки на стобцы
 	$array_by_column = explode(';', $string);
 	
-	// Убираем лишние пробелы
-	$array_by_column[1] = trim($array_by_column[1]);
-	
-	// Убираем лишние одинарные и двойные ковычки
-	$array_by_column[1] = preg_replace('/["\']/', '', $array_by_column[1]);
-	
 	// обработка каждой строки на наличие слов-исключений и их исправление
 	foreach($exclusion_word as $exc_word)
-	{	
+	{
 		$array_word_for_replace = PatternCreater($exc_word);
 
 		if (empty($array_word_for_replace)) {exit;}
@@ -206,12 +199,10 @@ foreach($input_file as $line => $string)
 				}
 			}
 		}
+		// Сохранение строки обработанного прайса в массив
+		$array_by_column[1] = trim($array_by_column[1]);
+		$input_file[$line] = $array_by_column[0].';'.$array_by_column[1].';'.$array_by_column[2].';'.$array_by_column[3];
 	}
-	
-	// Сохранение строки обработанного прайса
-	$array_by_column[1] = trim($array_by_column[1]);
-	$output_string = $array_by_column[0].';'.$array_by_column[1].';'.$array_by_column[2].';'.$array_by_column[3];
-	$input_file[$line] = $output_string;
 
 	// Выводим в процентах состояние обработки
 	if (STATISTIC_ON)
@@ -281,7 +272,7 @@ echo "\n";
 // исправление положения запятых
 foreach($input_file as $line => $string)
 {
-	$pattern = '/ *,/';
+	$pattern = '/,(?![0-9])/';
 	$raplace_atring = ', ';
 	$input_file[$line] = preg_replace($pattern, $raplace_atring, $string, -1, $result);
 	if (0 < $result)
@@ -329,6 +320,8 @@ echo "\n";
 //-------------------------------------
 
 // Сохраняем в файл
+$output_file = fopen($output_file, 'w');
+
 foreach ($input_file as $output_string)
 {
 	$output_string = iconv('UTF-8', 'CP1251', $output_string);
@@ -349,7 +342,7 @@ if (STATISTIC_ON)
 	echo 'Удалено лишних пробелов: '.$count['space']."\n";
 	$sum_count = $count['uppercase'] + $count['color'] + $count['space'];
 	echo 'Всего исправлено: '.$sum_count."\n";
-	printf('Скрипт выполнялся %.4F сек.', $time);
+	printf("Скрипт выполнялся %.4F сек.\n", $time);
 }
 
 // THE END
@@ -370,7 +363,7 @@ function PatternCreater($arg)
 			$value = trim($value);
 			
 			// Замена знака плюс на пробел
-			$array[$key] = str_replace('+', ' ', $value);
+			$array[$key] = str_replace('_', ' ', $value);
 		}
 		else
 		{
@@ -386,7 +379,7 @@ function ShowWhatDone($current, $max)
 {
 	if (!empty($current) && !empty($max))
 	{
-		if ($current <= $max)
+		if ($current < $max)
 		{
 			$result = (100 / $max) * $current;
 			$result = (int)$result;
@@ -399,4 +392,60 @@ function ShowWhatDone($current, $max)
 	}
 }
 
-?> 
+// Функция возвращает строку разделенную точка-запятой в 3 местах
+// Артикул;Название товара;Количество;Цена
+function getForColumn($array)
+{
+	if (!empty($array))
+	{
+		$column = explode(';', $array);
+		
+		$count = count($column);
+		
+		$column[] = '';
+		
+		$string = '';
+		
+		foreach($column as $key=>$value)
+		{
+			if (0 == $key)
+			{
+				$column[0] = $value.'';
+			}
+			elseif ($key < ($count - 3))
+			{
+				$column[1] .= $value;
+			}
+			elseif ($key == ($count - 2))
+			{
+				$column[2] = $value;
+			}
+			elseif ($key == ($count - 1))
+			{
+				$column[3] = $value;
+			}
+		}
+		
+		// Склеиваем массив в строку
+		foreach ($column as $string)
+		{
+			$string .= $column[0].';'.$column[1].';'.$column[2].';'.$column[3];
+		}
+		
+		return $string;
+	}
+}
+
+// Удаляет двойные ковычки, которые не относятся к дюймам
+function removeDoubleQuotes($string)
+{
+	if (!empty($string))
+	{
+		$string = preg_replace('/(?<![0-9])(?<=)"/', '', $string);
+		
+		$string = preg_replace('/\'/', '', $string);
+		
+		return $string;
+	}
+}
+?>
