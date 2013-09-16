@@ -272,7 +272,7 @@ echo "\n";
 // исправление положения запятых
 foreach($input_file as $line => $string)
 {
-	$pattern = '/,(?![0-9])/';
+	$pattern = '/ *,(?![0-9])/';
 	$raplace_atring = ', ';
 	$input_file[$line] = preg_replace($pattern, $raplace_atring, $string, -1, $result);
 	if (0 < $result)
