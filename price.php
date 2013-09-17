@@ -9,6 +9,8 @@ $output_file = 'Merlion_finished_'.date('d-m-Y_H-i').'.csv'; // Имя выхо�
 
 $arg[] = ''; // Массив входных параметров
 
+$procent = 0;
+
 define('WORD_FILE', 'dictionary.txt'); // Словарь
 
 define('COLOR_LIST', 'colors.txt'); // Файл со списком цветов
@@ -143,12 +145,25 @@ foreach($input_file as $line => $string)
 	if (STATISTIC_ON)
 	{	
 		$result = ShowWhatDone($line, $max_price_lines);
-		echo 'Быстрая чистка прайса: '.$result.' %'."\r";
+		
+		if (isset($result))
+		{
+			if ($result > $procent)
+			{
+				$procent = $result;
+				
+				echo 'Быстрая чистка прайса: '.$result.' %'."\r";
+			}
+		}
+		
 	}
 }
 
 // Очистка потока вывода
 echo "\n";
+
+// Обнуление переменных
+$procent = 0;
 
 //-------------------------------------
 
@@ -208,12 +223,24 @@ foreach($input_file as $line => $string)
 	if (STATISTIC_ON)
 	{
 		$result = ShowWhatDone($line, $max_price_lines);
-		echo 'Исправление по ключевым словам: '.$result.' %'."\r";
+		
+		if (isset($result))
+		{
+			if ($result > $procent)
+			{
+				$procent = $result;
+				
+				echo 'Исправление по ключевым словам: '.$result.' %'."\r";
+			}
+		}
 	}
 }
 
 // Очистка потока вывода
 echo "\n";
+
+// Обнуление переменных
+$procent = 0;
 
 //-------------------------------------
 
@@ -260,12 +287,24 @@ foreach($input_file as $line => $string)
 	if (STATISTIC_ON)
 	{
 		$result = ShowWhatDone($line, $max_price_lines);
-		echo 'Перемещение названий цветов в конец строки: '.$result.' %'."\r";
+		
+		if (isset($result))
+		{
+			if ($result > $procent)
+			{
+				$procent = $result;
+				
+				echo 'Перемещение названий цветов в конец строки: '.$result.' %'."\r";
+			}
+		}
 	}
 }
 
 // Очистка потока вывода
 echo "\n";
+
+// Обнуление переменных
+$procent = 0;
 
 //-------------------------------------
 
@@ -285,12 +324,24 @@ foreach($input_file as $line => $string)
 	if (STATISTIC_ON)
 	{
 		$result = ShowWhatDone($line, $max_price_lines);
-		echo 'Исправление положения зяпятых: '.$result.' %'."\r";
+		
+		if (isset($result))
+		{
+			if ($result > $procent)
+			{
+				$procent = $result;
+				
+				echo 'Исправление положения зяпятых: '.$result.' %'."\r";
+			}
+		}
 	}
 }
 
 // Очистка потока вывода
 echo "\n";
+
+// Обнуление переменных
+$procent = 0;
 
 //-------------------------------------
 
@@ -310,7 +361,16 @@ foreach($input_file as $line => $string)
 	if (STATISTIC_ON)
 	{
 		$result_space = ShowWhatDone($line, $max_price_lines);
-		echo 'Удаление двойных пробелов: '.$result_space.' %'."\r";
+		
+		if (isset($result))
+		{
+			if ($result > $procent)
+			{
+				$procent = $result;
+	
+				echo 'Удаление двойных пробелов: '.$result_space.' %'."\r";
+			}
+		}
 	}
 }
 
