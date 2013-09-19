@@ -136,8 +136,8 @@ foreach($input_file as $line => $string)
 	}
 	
 	$ready_string = trim($ready_string);
+	
 	$ready_string .= ';'.$array_by_column[2].';'.$array_by_column[3];
-	//$ready_string = iconv('UTF-8','CP1251', $ready_string);
 
 	$input_file[$line] = $ready_string;
 	
@@ -197,6 +197,7 @@ foreach($input_file as $line => $string)
 						if (0 < $number_of_changes)
 						{
 							$array_by_column[1] = $edit_string;
+							
 							// Запись в логи
 							$log = substr($string, 0, strlen($string)-1).' --> ;'.$exc_word;
 							$log = iconv('UTF-8','CP1251', $log);
@@ -214,6 +215,7 @@ foreach($input_file as $line => $string)
 				}
 			}
 		}
+		
 		// Сохранение строки обработанного прайса в массив
 		$array_by_column[1] = trim($array_by_column[1]);
 		$input_file[$line] = $array_by_column[0].';'.$array_by_column[1].';'.$array_by_column[2].';'.$array_by_column[3];
@@ -247,7 +249,7 @@ $procent = 0;
 // Перемещаем цвет в конец строки
 foreach($input_file as $line => $string)
 {
-	// Разбор строки на стобцыMFU
+	// Разбор строки на стобцы
 	$array_by_column = explode(';', $string);
 	
 	foreach($color_list as $color)
@@ -283,6 +285,7 @@ foreach($input_file as $line => $string)
 			}
 		}
 	}
+	
 	// Выводим в процентах состояние обработки
 	if (STATISTIC_ON)
 	{
@@ -416,6 +419,7 @@ if (STATISTIC_ON)
 function PatternCreater($arg)
 {
 	$array = explode(',', $arg);
+	
 	foreach ($array as $key => $value)
 	{
 		if (!empty($value))
