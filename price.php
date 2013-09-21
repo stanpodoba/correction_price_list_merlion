@@ -1,4 +1,5 @@
 #!/usr/bin/php
+
 <?php
 
 $start = microtime(true); // Время начала выполнения скрипта
